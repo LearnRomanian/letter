@@ -11,7 +11,7 @@ interface BaseEnvironment {
 	readonly ravendbHost?: string;
 	readonly ravendbPort?: string;
 	readonly ravendbDatabase?: string;
-	readonly ravendbSecure?: boolean;
+	readonly ravendbSecure?: string;
 	readonly couchdbUsername?: string;
 	readonly couchdbPassword?: string;
 	readonly couchdbProtocol?: string;
@@ -25,25 +25,28 @@ interface BaseEnvironment {
 	readonly rethinkdbDatabase?: string;
 }
 
-function loadEnvironment<Environment extends BaseEnvironment>({
+function loadEnvironment<
+	CustomEnvironment extends Record<string, string>,
+	Environment extends BaseEnvironment & CustomEnvironment,
+>({
 	log,
 	mapProperties,
 }: {
 	log: Logger;
-	mapProperties: (variables: Record<string, string | undefined>) => Exclude<Environment, keyof BaseEnvironment>;
-}): BaseEnvironment {
+	mapProperties: (variables: Record<string, string | undefined>) => CustomEnvironment;
+}): Environment {
 	log = log.child({ name: "Environment" });
 
-	log.info("Loading environment...");
+	log.debug("Loading environment...");
 
 	if (process.env.SECRET_DISCORD === undefined) {
-		log.error(
-			"Rost cannot start without a Discord token. Make sure you've included one in the environment variables with the key `SECRET_DISCORD`.",
+		log.fatal(
+			"Letter cannot start without a Discord token. Make sure you've included one in the environment variables with the key `SECRET_DISCORD`.",
 		);
 		process.exit(1);
 	}
 
-	const environment: Environment = {
+	const environment: BaseEnvironment & CustomEnvironment = {
 		...mapProperties(process.env),
 		discordSecret: process.env.SECRET_DISCORD,
 		databaseSolution: process.env.DATABASE_SOLUTION,
@@ -55,7 +58,7 @@ function loadEnvironment<Environment extends BaseEnvironment>({
 		ravendbHost: process.env.RAVENDB_HOST,
 		ravendbPort: process.env.RAVENDB_PORT,
 		ravendbDatabase: process.env.RAVENDB_DATABASE,
-		ravendbSecure: process.env.RAVENDB_SECURE === "true",
+		ravendbSecure: process.env.RAVENDB_SECURE,
 		couchdbUsername: process.env.COUCHDB_USERNAME,
 		couchdbPassword: process.env.COUCHDB_PASSWORD,
 		couchdbProtocol: process.env.COUCHDB_PROTOCOL,
@@ -69,9 +72,10 @@ function loadEnvironment<Environment extends BaseEnvironment>({
 		rethinkdbDatabase: process.env.RETHINKDB_DATABASE,
 	};
 
-	log.info("Environment loaded.");
+	log.debug("Environment loaded.");
 
-	return environment;
+	return environment as unknown as Environment;
 }
 
 export { loadEnvironment };
+export type { BaseEnvironment };
