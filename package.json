@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json.schemastore.org/package",
+  "name": "letter",
+  "description": "A framework built on top of Discordeno, used to build Learn Romanian's Discord bots.",
+  "license": "Apache-2.0",
+  "version": "0.0.1",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LearnRomanian/letter"
+  },
+  "contributors": [
+    {
+      "name": "Dorian \"vxern\" Oszczęda",
+      "email": "vxern@learnromanian.co.uk",
+      "url": "https://github.com/vxern"
+    }
+  ],
+  "dependencies": {
+    "@discordeno/bot": "^21.0.0",
+    "dotenv": "^17.2.1",
+    "mongodb": "^6.17.0",
+    "nano": "^10.1.4",
+    "nanoid": "^5.1.5",
+    "object-hash": "^3.0.0",
+    "pino": "^9.7.0",
+    "ravendb": "^7.0.1",
+    "rethinkdb-ts": "^2.7.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@types/bun": "^1.2.18",
+    "@types/object-hash": "^3.0.6",
+    "pino-pretty": "^13.0.0",
+    "typescript": "^5.8.3"
+  },
+  "trustedDependencies": [
+    "@biomejs/biome"
+  ]
+}
