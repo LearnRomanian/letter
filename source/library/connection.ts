@@ -1,20 +1,20 @@
 import {
 	type Bot,
 	type CompleteDesiredProperties,
-	createBot,
 	type DesiredPropertiesBehavior,
 	type DiscordMessage,
 	type EventHandlers,
 	type GatewayIntents,
 	type Transformers,
 	type TransformersDesiredProperties,
+	createBot,
 } from "@discordeno/bot";
 import type { Logger } from "pino";
 import loggers from "source/constants/loggers";
 
 class Connection<
 	TDesiredProperties extends TransformersDesiredProperties,
-	TDesiredPropertiesBehavior extends DesiredPropertiesBehavior = DesiredPropertiesBehavior.RemoveKey,
+	TDesiredPropertiesBehavior extends DesiredPropertiesBehavior,
 > {
 	readonly log: Logger;
 	readonly bot: Bot<TDesiredProperties, TDesiredPropertiesBehavior>;
@@ -71,19 +71,19 @@ class Connection<
 	}
 
 	async open(): Promise<void> {
-		this.log.info("Establishing connection with the Discord gateway...");
+		this.log.debug("Establishing connection with the Discord gateway...");
 
-		this.bot.start();
+		await this.bot.start();
 
-		this.log.info("A connection with the Discord gateway has been established.");
+		this.log.debug("A connection with the Discord gateway has been established.");
 	}
 
 	async close(): Promise<void> {
-		this.log.info("Closing Discord gateway connection...");
+		this.log.debug("Closing Discord gateway connection...");
 
-		this.bot.shutdown();
+		await this.bot.shutdown();
 
-		this.log.info("The connection with the Discord gateway has been closed.");
+		this.log.debug("The connection with the Discord gateway has been closed.");
 	}
 }
 

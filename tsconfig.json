@@ -31,5 +31,5 @@
 		"baseUrl": "",
 		"types": []
 	},
-	"compileOnSave": true,
+	"compileOnSave": true
 }
