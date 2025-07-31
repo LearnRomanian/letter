@@ -37,7 +37,7 @@ function loadEnvironment<
 }): Environment {
 	log = log.child({ name: "Environment" });
 
-	log.debug("Loading environment...");
+	log.info("Loading environment...");
 
 	if (process.env.SECRET_DISCORD === undefined) {
 		log.fatal(
@@ -72,7 +72,7 @@ function loadEnvironment<
 		rethinkdbDatabase: process.env.RETHINKDB_DATABASE,
 	};
 
-	log.debug("Environment loaded.");
+	log.info("Environment loaded.");
 
 	return environment as unknown as Environment;
 }

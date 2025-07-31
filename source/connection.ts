@@ -71,19 +71,19 @@ class Connection<
 	}
 
 	async open(): Promise<void> {
-		this.log.debug("Establishing connection with the Discord gateway...");
+		this.log.info("Establishing connection with the Discord gateway...");
 
 		await this.bot.start();
 
-		this.log.debug("A connection with the Discord gateway has been established.");
+		this.log.info("A connection with the Discord gateway has been established.");
 	}
 
 	async close(): Promise<void> {
-		this.log.debug("Closing Discord gateway connection...");
+		this.log.info("Closing Discord gateway connection...");
 
 		await this.bot.shutdown();
 
-		this.log.debug("The connection with the Discord gateway has been closed.");
+		this.log.info("The connection with the Discord gateway has been closed.");
 	}
 }
 
