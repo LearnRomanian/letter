@@ -73,13 +73,5 @@
     "indentWidth": 4,
     "indentStyle": "tab",
     "lineWidth": 120
-  },
-  "javascript": {
-    "globals": [
-      "Bun",
-      "Discord",
-      "Rost",
-      "constants"
-    ]
   }
 }
