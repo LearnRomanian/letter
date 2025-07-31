@@ -1,4 +1,4 @@
-import directories from "source/constants/directories";
+import directories from "./directories.ts";
 
 export default Object.freeze({
 	stdout: {

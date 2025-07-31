@@ -10,7 +10,7 @@ import {
 	createBot,
 } from "@discordeno/bot";
 import type { Logger } from "pino";
-import loggers from "source/constants/loggers";
+import loggers from "./constants/loggers.ts";
 
 class Connection<
 	TDesiredProperties extends TransformersDesiredProperties,

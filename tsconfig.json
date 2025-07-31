@@ -28,7 +28,6 @@
 		"suppressImplicitAnyIndexErrors": false,
 		"isolatedModules": true,
 		"allowImportingTsExtensions": true,
-		"baseUrl": "",
 		"types": []
 	},
 	"compileOnSave": true

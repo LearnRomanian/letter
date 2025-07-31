@@ -1,5 +1,5 @@
 import pino from "pino";
-import logTargets from "source/constants/log-targets";
+import logTargets from "./log-targets.ts";
 
 export default Object.freeze({
 	silent: pino({ level: "silent" }),

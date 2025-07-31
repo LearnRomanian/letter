@@ -3,8 +3,8 @@
 // import commands from "rost/commands/commands";
 import type { DesiredPropertiesBehavior, Intents, TransformersDesiredProperties } from "@discordeno/bot";
 import type { Logger } from "pino";
-import { Connection } from "source/library/connection";
-import type { BaseEnvironment } from "source/loaders/environment";
+import { Connection } from "./connection.ts";
+import type { BaseEnvironment } from "./loaders/environment.ts";
 // import { Diagnostics } from "rost/diagnostics";
 // import { CacheStore } from "rost/stores/cache";
 // import { CommandStore } from "rost/stores/commands";
@@ -17,7 +17,7 @@ import type { BaseEnvironment } from "source/loaders/environment";
 // import { PluginStore } from "rost/stores/plugins";
 // import { ServiceStore } from "rost/stores/services";
 
-class Client<
+class Letter<
 	Environment extends BaseEnvironment,
 	TDesiredProperties extends TransformersDesiredProperties,
 	TDesiredPropertiesBehavior extends DesiredPropertiesBehavior,
@@ -317,4 +317,4 @@ class Client<
 	}
 }
 
-export { Client };
+export { Letter };

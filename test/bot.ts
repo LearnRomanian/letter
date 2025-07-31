@@ -1,11 +1,11 @@
-import { Intents, createDesiredPropertiesObject } from "@discordeno/bot";
-import loggers from "source/constants/loggers";
-import { Client } from "source/library/client";
-import { loadEnvironment } from "source/loaders/environment";
+import { Letter } from "../index.ts";
+import loggers from "../source/constants/loggers.ts";
+import { loadEnvironment } from "../source/loaders/environment.ts";
+import { createDesiredPropertiesObject, Intents } from "@discordeno/bot";
 
-const logger = process.env.IS_DEBUG === "true" ? loggers.debug : loggers.standard;
+const logger = loggers.debug;
 
-const client = new Client({
+const client = new Letter({
 	environment: loadEnvironment({ log: logger, mapProperties: () => ({}) }),
 	userAgent: "Letter Framework",
 	desiredProperties: createDesiredPropertiesObject({}, true),
@@ -16,9 +16,11 @@ const client = new Client({
 		Intents.GuildVoiceStates |
 		Intents.GuildMessages |
 		Intents.MessageContent,
-	log: loggers.standard,
+	log: logger,
 });
 
 await client.start();
+
+console.log("yay");
 
 await client.stop();
