@@ -17,7 +17,7 @@ import type { BaseEnvironment } from "./loaders/environment.ts";
 // import { PluginStore } from "rost/stores/plugins";
 // import { ServiceStore } from "rost/stores/services";
 
-class Letter<
+class Client<
 	Environment extends BaseEnvironment,
 	TDesiredProperties extends TransformersDesiredProperties,
 	TDesiredPropertiesBehavior extends DesiredPropertiesBehavior,
@@ -317,4 +317,4 @@ class Letter<
 	}
 }
 
-export { Letter };
+export { Client };

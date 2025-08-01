@@ -1,11 +1,11 @@
-import { Letter } from "../index.ts";
+import { Client } from "../index.ts";
 import loggers from "../source/constants/loggers.ts";
 import { loadEnvironment } from "../source/loaders/environment.ts";
 import { createDesiredPropertiesObject, Intents } from "@discordeno/bot";
 
 const logger = loggers.debug;
 
-const client = new Letter({
+const client = new Client({
 	environment: loadEnvironment({ log: logger, mapProperties: () => ({}) }),
 	userAgent: "Letter Framework",
 	desiredProperties: createDesiredPropertiesObject({}, true),
