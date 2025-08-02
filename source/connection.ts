@@ -6,14 +6,14 @@ import {
 	type EventHandlers,
 	type GatewayIntents,
 	type Transformers,
-	type TransformersDesiredProperties,
 	createBot,
 } from "@discordeno/bot";
 import type { Logger } from "pino";
 import loggers from "./constants/loggers.ts";
+import type { BaseDesiredProperties } from "./utilities/types.ts";
 
 class Connection<
-	TDesiredProperties extends TransformersDesiredProperties,
+	TDesiredProperties extends BaseDesiredProperties,
 	TDesiredPropertiesBehavior extends DesiredPropertiesBehavior,
 > {
 	readonly log: Logger;

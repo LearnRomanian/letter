@@ -1,12 +1,14 @@
 // import type { Environment } from "rost:core/loaders/environment";
 // import { Collector, type InteractionCollector } from "rost/collectors";
 // import commands from "rost/commands/commands";
-import type { DesiredPropertiesBehavior, Intents, Locales, TransformersDesiredProperties } from "@discordeno/bot";
+import type { DesiredPropertiesBehavior, Intents } from "@discordeno/bot";
 import type { Logger } from "pino";
 import { Connection } from "./connection.ts";
 import type { BaseEnvironment } from "./loaders/environment.ts";
-import { ServiceStore } from "./services.ts";
-// import { Diagnostics } from "rost/diagnostics";
+import { GlobalService, LocalService, ServiceStore } from "./services.ts";
+import { Diagnostics } from "./diagnostics.ts";
+import { Cache } from "./cache.ts";
+import type { BaseDesiredProperties } from "./utilities/types.ts";
 // import { CacheStore } from "rost/stores/cache";
 // import { CommandStore } from "rost/stores/commands";
 // import { DatabaseStore } from "rost/stores/database";
@@ -16,21 +18,19 @@ import { ServiceStore } from "./services.ts";
 // import { JournallingStore } from "rost/stores/journalling";
 // import { LocalisationStore, type RawLocalisations } from "rost/stores/localisations";
 
-type Locale = `${Locales}`;
-
 class Client<
 	Environment extends BaseEnvironment,
-	TDesiredProperties extends TransformersDesiredProperties,
+	TDesiredProperties extends BaseDesiredProperties,
 	TDesiredPropertiesBehavior extends DesiredPropertiesBehavior,
 > {
 	readonly log: Logger;
 	readonly environment: Environment;
-	// readonly diagnostics: Diagnostics;
+	readonly diagnostics: Diagnostics<this, TDesiredProperties, TDesiredPropertiesBehavior>;
 
 	// readonly #localisations: LocalisationStore;
 	// readonly #commands: CommandStore;
 	// readonly interactions: InteractionStore;
-	// readonly #cache: CacheStore;
+	readonly #cache: Cache<TDesiredProperties, TDesiredPropertiesBehavior>;
 	// readonly database: DatabaseStore;
 	readonly services: ServiceStore<this, GlobalServices, LocalServices>;
 	// readonly #events: EventStore;
@@ -167,9 +167,9 @@ class Client<
 	// 	return this.#events.registerCollector.bind(this.#events);
 	// }
 
-	// get entities(): CacheStore["entities"] {
-	// 	return this.#cache.entities;
-	// }
+	get entities(): Cache<TDesiredProperties, TDesiredPropertiesBehavior>["entities"] {
+		return this.#cache.entities;
+	}
 
 	// get documents(): CacheStore["documents"] {
 	// 	return this.#cache.documents;
@@ -206,7 +206,7 @@ class Client<
 	}) {
 		this.log = log.child({ name: "Client" });
 		this.environment = environment;
-		// this.diagnostics = new Diagnostics(this);
+		this.diagnostics = new Diagnostics(this);
 
 		// this.#localisations = new LocalisationStore({ log, localisations });
 		// this.#commands = CommandStore.create(this, {
@@ -214,7 +214,7 @@ class Client<
 		// 	templates: commands,
 		// });
 		// this.interactions = new InteractionStore(this, { commands: this.#commands });
-		// this.#cache = new CacheStore({ log });
+		this.#cache = new Cache({ log });
 		// this.database = DatabaseStore.create({ log, environment, cache: this.#cache });
 		this.services = new ServiceStore(this);
 		// this.#events = new EventStore(this);
@@ -227,7 +227,7 @@ class Client<
 			desiredProperties,
 			intents,
 			// eventHandlers: this.#events.buildEventHandlers(),
-			// cacheHandlers: this.#cache.buildCacheHandlers(),
+			cacheHandlers: this.#cache.buildCacheHandlers(),
 		});
 
 		// this.#channelDeletes = new Collector<"channelDelete">();
@@ -268,7 +268,7 @@ class Client<
 		// await this.#guilds.setup();
 		// await this.interactions.setup();
 		// await this.#setupCollectors();
-		// await this.#connection.open();
+		await this.#connection.open();
 
 		this.log.info("Client started.");
 	}
@@ -315,4 +315,3 @@ class Client<
 }
 
 export { Client };
-export type { Locale };

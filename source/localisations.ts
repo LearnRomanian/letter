@@ -1,8 +1,8 @@
 import type { Localization } from "@discordeno/bot";
 import type pino from "pino";
-import type { Locale } from "./client.ts";
 import locales from "./constants/locales.ts";
 import { pluralise } from "./pluralisers/pluralisers.ts";
+import type { Locale } from "./utilities/types.ts";
 
 type RawLocalisationBuilder = (data?: Record<string, unknown>) => string | undefined;
 type LocalisationBuilder = (data?: Record<string, unknown>) => string;

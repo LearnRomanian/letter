@@ -3,4 +3,8 @@ export default Object.freeze({
 		// Acts as a delimeter for pieces of metadata encoded into an interaction custom ID.
 		customIdSeparator: "/",
 	},
+	formatting: {
+		trail: "…",
+		continued: "(…)",
+	},
 } as const);

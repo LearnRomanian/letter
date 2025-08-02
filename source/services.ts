@@ -1,5 +1,4 @@
 import type pino from "pino";
-import type { Message } from "@discordeno/bot";
 import type { Client } from "./client.ts";
 
 abstract class Service<TClient extends Client<any, any, any>> {
@@ -32,13 +31,13 @@ abstract class LocalService<TClient extends Client<any, any, any>> extends Servi
 	readonly guildId: bigint;
 	readonly guildIdString: string;
 
-	get guild(): Rost.Guild {
-		return this.client.entities.guilds.get(this.guildId)!;
-	}
+	// get guild(): Letter<Guild> {
+	// 	return this.client.entities.guilds.get(this.guildId)!;
+	// }
 
-	get guildDocument(): Guild {
-		return this.client.documents.guilds.get(this.guildIdString)!;
-	}
+	// get guildDocument(): Guild {
+	// 	return this.client.documents.guilds.get(this.guildIdString)!;
+	// }
 
 	constructor(client: TClient, { identifier, guildId }: { identifier: string; guildId: bigint }) {
 		super(client, { identifier });
@@ -53,37 +52,6 @@ abstract class LocalService<TClient extends Client<any, any, any>> extends Servi
 
 	async stop(): Promise<void> {
 		// Do nothing.
-	}
-
-	async getAllMessages({ channelId }: { channelId: bigint }): Promise<Message[] | undefined> {
-		const buffer: Message[] = [];
-
-		let isFinished = false;
-		while (!isFinished) {
-			const chunk = await this.client.bot.helpers
-				.getMessages(channelId, {
-					limit: 100,
-					before: buffer.length === 0 ? undefined : buffer.at(-1)?.id,
-				})
-				.catch((error: any) => {
-					this.client.log.warn(
-						error,
-						`Failed to get all messages from ${this.client.diagnostics.channel(channelId)}.`,
-					);
-					return undefined;
-				});
-			if (chunk === undefined) {
-				return undefined;
-			}
-
-			if (chunk.length < 100) {
-				isFinished = true;
-			}
-
-			buffer.push(...chunk);
-		}
-
-		return buffer;
 	}
 }
 
