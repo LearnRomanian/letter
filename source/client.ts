@@ -1,7 +1,7 @@
 // import type { Environment } from "rost:core/loaders/environment";
 // import { Collector, type InteractionCollector } from "rost/collectors";
 // import commands from "rost/commands/commands";
-import type { DesiredPropertiesBehavior, Intents, TransformersDesiredProperties } from "@discordeno/bot";
+import type { DesiredPropertiesBehavior, Intents, Locales, TransformersDesiredProperties } from "@discordeno/bot";
 import type { Logger } from "pino";
 import { Connection } from "./connection.ts";
 import type { BaseEnvironment } from "./loaders/environment.ts";
@@ -16,6 +16,8 @@ import type { BaseEnvironment } from "./loaders/environment.ts";
 // import { LocalisationStore, type RawLocalisations } from "rost/stores/localisations";
 // import { PluginStore } from "rost/stores/plugins";
 // import { ServiceStore } from "rost/stores/services";
+
+type Locale = `${Locales}`;
 
 class Client<
 	Environment extends BaseEnvironment,
@@ -318,3 +320,4 @@ class Client<
 }
 
 export { Client };
+export type { Locale };

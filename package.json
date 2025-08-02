@@ -22,6 +22,9 @@
       "url": "https://github.com/vxern"
     }
   ],
+  "scripts": {
+    "check": "biome check --write --unsafe ./source/ && tsc"
+  },
   "dependencies": {
     "@discordeno/bot": "21.0.1-next.3b4cdf6",
     "dotenv": "^17.2.1",
