@@ -1,0 +1,31 @@
+import patterns from "./patterns.ts";
+
+/**
+ * Parses a 6-digit hex value prefixed with a hashtag to a number.
+ *
+ * @param colour - The color represented as a 6-digit hexadecimal value prefixed
+ * with a hashtag.
+ * @returns The decimal form.
+ */
+function fromHex(colour: string): number {
+	if (!patterns.rgbHex.test(colour)) {
+		throw new Error("The passed colour was not in the correct format (#ffffff).");
+	}
+
+	return Number.parseInt(colour.replace("#", "0x"));
+}
+
+export default Object.freeze({
+	// Special
+	invisible: fromHex("#36393f"), // Used to blend in with the rest of an embed.
+	// Reply methods
+	unsupported: fromHex("#d6e3f8"),
+	notice: fromHex("#ffffff"),
+	success: fromHex("#89ef59"),
+	pushback: fromHex("#ff9a76"),
+	warning: fromHex("#f2f277"),
+	error: fromHex("#ff4b3e"),
+	failure: fromHex("#820000"),
+	death: fromHex("#1c1c1c"),
+} as const);
+export { fromHex };

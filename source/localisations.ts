@@ -11,7 +11,6 @@ type Localisations = Map<
 	// String key.
 	string,
 	Map<
-		// TODO(vxern): Does this work?
 		// Language the string is localised into.
 		Locale,
 		// Generator function for dynamically slotting data into the string.
@@ -26,6 +25,7 @@ interface DescriptionLocalisations {
 	readonly description: string;
 	readonly descriptionLocalizations?: Partial<Record<Locale, string>>;
 }
+// TODO(vxern): Rename to `Localisations`.
 class LocalisationStore {
 	readonly log: pino.Logger;
 

@@ -43,7 +43,7 @@ class Connection<
 			>["customizers"]
 		>;
 	}) {
-		this.log = log.child({ name: "DiscordConnection" });
+		this.log = log.child({ name: "Connection" });
 		this.bot = createBot<TDesiredProperties, TDesiredPropertiesBehavior>({
 			token,
 			intents,
