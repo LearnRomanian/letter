@@ -5,6 +5,7 @@ import type { DesiredPropertiesBehavior, Intents, Locales, TransformersDesiredPr
 import type { Logger } from "pino";
 import { Connection } from "./connection.ts";
 import type { BaseEnvironment } from "./loaders/environment.ts";
+import { ServiceStore } from "./services.ts";
 // import { Diagnostics } from "rost/diagnostics";
 // import { CacheStore } from "rost/stores/cache";
 // import { CommandStore } from "rost/stores/commands";
@@ -14,8 +15,6 @@ import type { BaseEnvironment } from "./loaders/environment.ts";
 // import { InteractionStore } from "rost/stores/interactions";
 // import { JournallingStore } from "rost/stores/journalling";
 // import { LocalisationStore, type RawLocalisations } from "rost/stores/localisations";
-// import { PluginStore } from "rost/stores/plugins";
-// import { ServiceStore } from "rost/stores/services";
 
 type Locale = `${Locales}`;
 
@@ -25,7 +24,7 @@ class Client<
 	TDesiredPropertiesBehavior extends DesiredPropertiesBehavior,
 > {
 	readonly log: Logger;
-	// readonly environment: Environment;
+	readonly environment: Environment;
 	// readonly diagnostics: Diagnostics;
 
 	// readonly #localisations: LocalisationStore;
@@ -33,11 +32,10 @@ class Client<
 	// readonly interactions: InteractionStore;
 	// readonly #cache: CacheStore;
 	// readonly database: DatabaseStore;
-	// readonly services: ServiceStore;
+	readonly services: ServiceStore<this, GlobalServices, LocalServices>;
 	// readonly #events: EventStore;
 	// readonly #journalling: JournallingStore;
 	// readonly #guilds: GuildStore;
-	// readonly #plugins: PluginStore;
 	readonly #connection: Connection<TDesiredProperties, TDesiredPropertiesBehavior>;
 
 	// readonly #channelDeletes: Collector<"channelDelete">;
@@ -207,7 +205,7 @@ class Client<
 		// localisations: RawLocalisations;
 	}) {
 		this.log = log.child({ name: "Client" });
-		// this.environment = environment;
+		this.environment = environment;
 		// this.diagnostics = new Diagnostics(this);
 
 		// this.#localisations = new LocalisationStore({ log, localisations });
@@ -218,11 +216,10 @@ class Client<
 		// this.interactions = new InteractionStore(this, { commands: this.#commands });
 		// this.#cache = new CacheStore({ log });
 		// this.database = DatabaseStore.create({ log, environment, cache: this.#cache });
-		// this.services = new ServiceStore(this);
+		this.services = new ServiceStore(this);
 		// this.#events = new EventStore(this);
 		// this.#journalling = new JournallingStore(this);
 		// this.#guilds = new GuildStore(this, { services: this.services, commands: this.#commands });
-		// this.#plugins = new PluginStore(this);
 		this.#connection = new Connection({
 			log,
 			token: environment.discordSecret,
@@ -266,13 +263,12 @@ class Client<
 		this.log.info("Starting client...");
 
 		// await this.database.setup({ prefetchDocuments: true });
-		// await this.services.setup();
+		await this.services.setup();
 		// await this.#journalling.setup();
 		// await this.#guilds.setup();
 		// await this.interactions.setup();
 		// await this.#setupCollectors();
 		// await this.#connection.open();
-		// await this.#plugins.setup();
 
 		this.log.info("Client started.");
 	}
@@ -293,12 +289,11 @@ class Client<
 		this.#stopSignal = signal;
 
 		// await this.database.teardown();
-		// await this.services.teardown();
+		await this.services.teardown();
 		// this.#journalling.teardown();
 		// await this.#guilds.teardown();
 		// await this.interactions.teardown();
 		// this.#teardownCollectors();
-		// await this.#plugins.teardown();
 		await this.#connection.close();
 
 		this.#isStopping = false;
