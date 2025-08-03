@@ -7,7 +7,7 @@ import type { Locale } from "./utilities/types.ts";
 type RawLocalisationBuilder = (data?: Record<string, unknown>) => string | undefined;
 type LocalisationBuilder = (data?: Record<string, unknown>) => string;
 type RawLocalisations = Map<string, Map<Locale, string>>;
-type Localisations = Map<
+type BuiltLocalisations = Map<
 	// String key.
 	string,
 	Map<
@@ -17,6 +17,7 @@ type Localisations = Map<
 		LocalisationBuilder
 	>
 >;
+
 interface NameLocalisations {
 	readonly name: string;
 	readonly nameLocalizations?: Partial<Record<Locale, string>>;
@@ -25,25 +26,24 @@ interface DescriptionLocalisations {
 	readonly description: string;
 	readonly descriptionLocalizations?: Partial<Record<Locale, string>>;
 }
-// TODO(vxern): Rename to `Localisations`.
-class LocalisationStore {
+class Localisations {
 	readonly log: pino.Logger;
 
-	readonly #localisations: Localisations;
+	readonly #localisations: BuiltLocalisations;
 
 	constructor({ log, localisations }: { log: pino.Logger; localisations: RawLocalisations }) {
 		this.log = log.child({ name: "LocalisationStore" });
 
-		this.#localisations = LocalisationStore.#buildLocalisations(localisations);
+		this.#localisations = Localisations.#buildLocalisations(localisations);
 	}
 
-	static #buildLocalisations(localisations: RawLocalisations): Localisations {
+	static #buildLocalisations(localisations: RawLocalisations): BuiltLocalisations {
 		const builders = new Map<string, Map<Locale, LocalisationBuilder>>();
 		for (const [key, languages] of localisations.entries()) {
 			const processors = new Map<Locale, LocalisationBuilder>();
 			for (const [language, string] of languages.entries()) {
 				processors.set(language, (data?: Record<string, unknown>) =>
-					LocalisationStore.#processString(string, { data }),
+					Localisations.#processString(string, { data }),
 				);
 			}
 
@@ -98,7 +98,7 @@ class LocalisationStore {
 			return { name };
 		}
 
-		const nameLocalisations = LocalisationStore.#toDiscordLocalisations(localisation);
+		const nameLocalisations = Localisations.#toDiscordLocalisations(localisation);
 
 		return { name, nameLocalizations: nameLocalisations };
 	}
@@ -126,7 +126,7 @@ class LocalisationStore {
 			return { description };
 		}
 
-		const descriptionLocalisations = LocalisationStore.#toDiscordLocalisations(localisation);
+		const descriptionLocalisations = Localisations.#toDiscordLocalisations(localisation);
 
 		return { description, descriptionLocalizations: descriptionLocalisations };
 	}
@@ -214,5 +214,5 @@ class LocalisationStore {
 	}
 }
 
-export { LocalisationStore };
+export { Localisations };
 export type { LocalisationBuilder, RawLocalisations, NameLocalisations, DescriptionLocalisations };
